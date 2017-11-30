@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ConfigCronJob">
+
+    <typeAlias alias="configCronJob" type="com.lidennis.plat.config.model.ConfigCronJob" />
+
+    <resultMap id="configCronJobResultSimple" class="configCronJob">
+        <result property="itemId"        column="ITEMID" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+    </resultMap>
+    <resultMap id="configCronJobResult" class="configCronJob">
+        <!-- Base Model -->
+        <result property="itemId"        column="ITEMID" />
+        <result property="version"       column="VERSION"      nullValue="1" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="itemDesc"      column="ITEMDESC" />
+        <result property="createUser"    column="CREATEUSER" />
+        <result property="createTime"    column="CREATETIME" />
+        <result property="updateUser"    column="UPDATEUSER" />
+        <result property="updateTime"    column="UPDATETIME" />
+        <result property="orderNum"      column="ORDERNUM" />
+        <result property="enableFlag"    column="ENABLEFLAG"/>
+        <!-- Extend Model -->
+        <result property="uuidCode"      column="uuidCode" />
+        <result property="classifyCode"  column="CLASSIFYCODE" />
+        <result property="serverCode"    column="SERVERCODE" />
+        <result property="serverName"    column="SERVERNAME" />
+        <result property="serviceCode"   column="SERVICECODE" />
+        <result property="procCode"      column="PROCCODE" />
+        <result property="procName"      column="PROCNAME" />
+        <result property="procBeanName"  column="PROCBEANNAME" />
+        <result property="procParam"     column="PROCPARAM" />
+        <result property="procStatus"    column="PROCSTATUS" />
+        <result property="cronExpress"   column="CRONEXPRESS" />
+        <result property="triggerStatus" column="TRIGGERSTATUS" />
+        <result property="startExecTime" column="STARTEXECTIME" />
+        <result property="lastExecTime"  column="LASTEXECTIME" />
+        <result property="nextExecTime"  column="NEXTEXECTIME" />
+        <result property="execCount"     column="EXECCOUNT" /> 
+        <result property="execStatus"    column="EXECSTATUS" /> 
+        <result property="errorCount"    column="ERRORCOUNT" /> 
+        <result property="errorLastTime" column="ERRORLASTTIME" /> 
+        <result property="errorLogTime"  column="ERRORLOGTIME" /> 
+        <result property="runLogTime"    column="RUNLOGTIME" /> 
+        <result property="noticeParam"   column="NOTICEPARAM" /> 
+        <result property="exfield01"     column="EXFIELD01" />
+        <result property="exfield02"     column="EXFIELD02" />
+    </resultMap>
+    
+    <insert id="insert" parameterClass="configCronJob">
+        <![CDATA[
+            INSERT INTO S_C_CRON_JOB (
+                VERSION, ITEMCODE, ITEMNAME, ITEMENNAME, UUIDCODE, ITEMDESC, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, ENABLEFLAG, ORDERNUM, 
+                CLASSIFYCODE, SERVERCODE, SERVICECODE, PROCCODE, PROCPARAM, PROCSTATUS, EXECCOUNT, ERRORCOUNT, CRONEXPRESS, NOTICEPARAM, EXFIELD01, EXFIELD02
+            ) VALUES (
+                1, #itemCode#, #itemName#, #itemEnName#, #uuidCode#, #itemDesc#, #createUser#, #createTime#, #updateUser#, #updateTime#, #enableFlag#, #orderNum#,
+                #classifyCode#, #serverCode#, #serviceCode#, #procCode#, #procParam#, #procStatus#, 0, 0, #cronExpress#, #noticeParam#, #exfield01#, #exfield02#
+            )
+        ]]>
+        <selectKey keyProperty="itemId" type="post" resultClass="java.lang.Long">   
+            <![CDATA[ SELECT LAST_INSERT_ID() AS ITEMID ]]>
+        </selectKey>
+    </insert>
+    <insert id="insertOracle" parameterClass="configCronJob">
+        <selectKey keyProperty="itemId" resultClass="java.lang.Long">
+            <![CDATA[ SELECT SEQ_T_BASEMODEL.NEXTVAL AS ITEMID FROM DUAL ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO S_C_CRON_JOB (
+                ITEMID, VERSION, ITEMCODE, ITEMNAME, ITEMENNAME, UUIDCODE, ITEMDESC, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, ENABLEFLAG, ORDERNUM, 
+                CLASSIFYCODE, SERVERCODE, SERVICECODE, PROCCODE, PROCPARAM, PROCSTATUS, EXECCOUNT, ERRORCOUNT, CRONEXPRESS, NOTICEPARAM, EXFIELD01, EXFIELD02
+            ) VALUES (
+                #itemId#, 1, #itemCode#, #itemName#, #itemEnName#, #uuidCode#, #itemDesc#, #createUser#, #createTime#, #updateUser#, #updateTime#, #enableFlag#, #orderNum#,
+                #classifyCode#, #serverCode#, #serviceCode#, #procCode#, #procParam#, #procStatus#, 0, 0, #cronExpress#, #noticeParam#, #exfield01#, #exfield02#
+            )
+        ]]>
+    </insert>
+    <update id="update" parameterClass="configCronJob">
+        <![CDATA[
+            UPDATE S_C_CRON_JOB SET 
+                VERSION=VERSION+1, ITEMCODE=#itemCode#, ITEMNAME=#itemName#, ITEMENNAME=#itemEnName#, ITEMDESC=#itemDesc#, CLASSIFYCODE=#classifyCode#, SERVERCODE=#serverCode#, SERVICECODE=#serviceCode#, PROCCODE=#procCode#, PROCPARAM=#procParam#, 
+                PROCSTATUS=#procStatus#, TRIGGERSTATUS=#triggerStatus#, STARTEXECTIME=#startExecTime#, LASTEXECTIME=#lastExecTime#, NEXTEXECTIME=#nextExecTime#, EXECCOUNT=#execCount#, EXECSTATUS=#execStatus#, CRONEXPRESS=#cronExpress#,  
+                ERRORLASTTIME=#errorLastTime#, ERRORLOGTIME=#errorLogTime#, ERRORCOUNT=#errorCount#, RUNLOGTIME=#runLogTime#, NOTICEPARAM=#noticeParam#, UPDATEUSER=#updateUser#, UPDATETIME=#updateTime#, ENABLEFLAG=#enableFlag#, ORDERNUM=#orderNum#, EXFIELD01=#exfield01#, EXFIELD02=#exfield02#
+            WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </update>
+    <delete id="delete" parameterClass="configCronJob">
+        <![CDATA[
+            DELETE FROM S_C_CRON_JOB WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </delete>
+    <delete id="deleteBatch" parameterClass="java.util.Map">
+        <![CDATA[
+            DELETE FROM S_C_CRON_JOB WHERE ITEMID IN 
+        ]]>
+        <iterate property="itemIdList" open="(" close=")" conjunction=",">
+            #itemIdList[]#
+        </iterate>
+    </delete>
+    
+    <sql id="sql_select_simple">
+        SELECT t.ITEMID, t.ITEMCODE, t.ITEMNAME, t.ITEMENNAME  
+    </sql>
+    <sql id="sql_select">
+        SELECT t.*, t2.ITEMNAME SERVERNAME, t3.ITEMNAME PROCNAME, t3.BEANNAME PROCBEANNAME
+    </sql>
+    <sql id="sql_from">
+        FROM S_C_CRON_JOB t left join S_C_CONN_SERVER t2 on t.SERVERCODE=t2.ITEMCODE left join S_C_PROC_MAPPING t3 on t.PROCCODE=t3.ITEMCODE 
+    </sql>
+    <sql id="sql_where">
+        WHERE 1=1
+        <dynamic prepend="AND">
+            <isNotNull prepend="AND" property="itemId"> t.ITEMID=#itemId# </isNotNull>
+            <isNotNull prepend="AND" property="itemId_notexist"><![CDATA[ t.ITEMID<>#itemId_notexist# ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemId_in"><![CDATA[ t.ITEMID IN ($itemId_in$) ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemCode"> t.ITEMCODE=#itemCode# </isNotNull>
+            <isNotNull prepend="AND" property="itemName"> t.ITEMNAME=#itemName# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName"> t.ITEMENNAME=#itemEnName# </isNotNull>
+            <isNotNull prepend="AND" property="itemCode_like"> t.ITEMCODE like #itemCode_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemName_like"> t.ITEMNAME like #itemName_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName_like"> t.ITEMENNAME like #itemEnName_like# </isNotNull> 
+            <isNotNull prepend="AND" property="uuidCode"> t.UUIDCODE=#uuidCode# </isNotNull>
+            <isNotNull prepend="AND" property="classifyCode"> t.CLASSIFYCODE=#classifyCode# </isNotNull>
+            <isNotNull prepend="AND" property="serverCode"> t.SERVERCODE=#serverCode# </isNotNull>
+            <isNotNull prepend="AND" property="procCode"> t.PROCCODE like #procCode# </isNotNull>
+            <isNotNull prepend="AND" property="procStatus"> t.PROCSTATUS=#procStatus# </isNotNull>
+            <isNotNull prepend="AND" property="procParam"> t.PROCPARAM like #procParam# </isNotNull>
+            <isNotNull prepend="AND" property="triggerStatus"> t.TRIGGERSTATUS=#triggerStatus# </isNotNull>
+            <isNotNull prepend="AND" property="enableFlag"> t.ENABLEFLAG=#enableFlag# </isNotNull>
+            <isNotNull prepend="AND" property="exfield01"> t.EXFIELD01=#exfield01#</isNotNull>
+            <isNotNull prepend="AND" property="exfield02"> t.EXFIELD02=#exfield02#</isNotNull>
+        </dynamic>
+    </sql>
+    <sql id="sql_orderby">
+        <isNotNull property="_orderByStr">
+            <![CDATA[ ORDER BY $_orderByStr$ ]]>
+        </isNotNull>
+    </sql>
+    
+    <select id="findById" parameterClass="java.lang.Long" resultMap="configCronJobResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMID=#value# ]]>
+    </select>
+    <select id="findByCode" parameterClass="java.lang.String" resultMap="configCronJobResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMCODE=#value# ]]>
+    </select>
+    <select id="findCountByParams" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        <![CDATA[ SELECT COUNT(*) ]]>
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+    </select>
+    <select id="findSimpleByParams" resultMap="configCronJobResultSimple">
+        <include refid="sql_select_simple" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+    </select>
+    <select id="findByParams" resultMap="configCronJobResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ limit #_startRow#, #_limitRow# ]]> 
+        </isGreaterThan>
+    </select>
+    <select id="findByParamsOracle" resultMap="configCronJobResult">
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ SELECT * FROM ( ]]> 
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ SELECT T_P_ALIAS.*, ROWNUM ROWNUM_2 FROM ( ]]>
+            </isGreaterThan>
+        </isGreaterThan>
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ ) T_P_ALIAS WHERE ROWNUM <= #_endRow#) WHERE ROWNUM_2 > #_startRow# ]]>
+            </isGreaterThan>
+            <isLessEqual property="_startRow" compareValue="0">
+                <![CDATA[ ) WHERE ROWNUM <= #_endRow# ]]>
+            </isLessEqual>
+        </isGreaterThan>
+    </select>
+    
+</sqlMap>

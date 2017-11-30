@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ConfigDictType">
+
+    <typeAlias alias="configDictType" type="com.lidennis.plat.config.model.ConfigDictType" />
+
+    <resultMap id="configDictTypeResultSimple" class="configDictType">
+        <result property="itemId"        column="ITEMID" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="czId"          column="CZID" />
+    </resultMap>
+    <resultMap id="configDictTypeResult" class="configDictType">
+        <!-- Base Model -->
+        <result property="itemId"        column="ITEMID" />
+        <result property="version"       column="VERSION"      nullValue="1" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="bizCode"       column="BIZCODE" />
+        <result property="levelFlag"     column="LEVELFLAG" />
+        <result property="rootNodeId"    column="ROOTNODEID" />
+        <result property="itemDesc"      column="ITEMDESC" />
+        <result property="itemCount"     column="ITEMCOUNT" />
+        <result property="createUser"    column="CREATEUSER" />
+        <result property="createTime"    column="CREATETIME" />
+        <result property="updateUser"    column="UPDATEUSER" />
+        <result property="updateTime"    column="UPDATETIME" />
+        <result property="czId"          column="CZID" />
+        <result property="orderNum"      column="ORDERNUM" />
+        <result property="enableFlag"    column="ENABLEFLAG"/>
+        <result property="exfield01"     column="EXFIELD01" />
+        <result property="exfield02"     column="EXFIELD02" />
+    </resultMap>
+
+    <insert id="insert" parameterClass="configDictType">
+        <![CDATA[
+            INSERT INTO S_C_DICT_TYPE (
+                VERSION, ITEMCODE, BIZCODE, ITEMNAME, ITEMENNAME, LEVELFLAG, ROOTNODEID, ITEMDESC, ITEMCOUNT, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, CZID, ENABLEFLAG, ORDERNUM, EXFIELD01, EXFIELD02
+            ) VALUES (
+                1, #itemCode#, #bizCode#, #itemName#, #itemEnName#, #levelFlag#, #rootNodeId#, #itemDesc#, 0, #createUser#, #createTime#, #updateUser#, #updateTime#, #czId#, #enableFlag#, #orderNum#, #exfield01#, #exfield02# 
+            )
+        ]]>
+        <selectKey keyProperty="itemId" type="post" resultClass="java.lang.Long">   
+            <![CDATA[ SELECT LAST_INSERT_ID() AS ITEMID ]]>
+        </selectKey>
+    </insert>
+    <insert id="insertOracle" parameterClass="configDictType">
+        <selectKey keyProperty="itemId" resultClass="java.lang.Long">
+            <![CDATA[ SELECT SEQ_S_DICT_TYPE.NEXTVAL AS ITEMID FROM DUAL ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO S_C_DICT_TYPE (
+                ITEMID, VERSION, ITEMCODE, BIZCODE, ITEMNAME, ITEMENNAME, LEVELFLAG, ROOTNODEID, ITEMDESC, ITEMCOUNT, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, CZID, ENABLEFLAG, ORDERNUM, EXFIELD01, EXFIELD02
+            ) VALUES (
+                #itemId#, 1, #itemCode#, #bizCode#, #itemName#, #itemEnName#, #levelFlag#, #rootNodeId#, #itemDesc#, 0, #createUser#, #createTime#, #updateUser#, #updateTime#, #czId#, #enableFlag#, #orderNum#, #exfield01#, #exfield02# 
+            )
+        ]]>
+    </insert>
+    <update id="update" parameterClass="configDictType">
+        <![CDATA[
+            UPDATE S_C_DICT_TYPE SET 
+                VERSION=VERSION+1, ITEMNAME=#itemName#, ITEMENNAME=#itemEnName#, LEVELFLAG=#levelFlag#, ROOTNODEID=#rootNodeId#, ITEMCOUNT=#itemCount#, ITEMDESC=#itemDesc#, UPDATEUSER=#updateUser#, UPDATETIME=#updateTime#, ENABLEFLAG=#enableFlag#, ORDERNUM=#orderNum#, EXFIELD01=#exfield01#, EXFIELD02=#exfield02#  
+            WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </update>
+    <delete id="delete" parameterClass="configDictType">
+        <![CDATA[
+            DELETE FROM S_C_DICT_TYPE WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </delete>
+    <delete id="deleteBatch" parameterClass="java.util.Map">
+        <![CDATA[
+            DELETE FROM S_C_DICT_TYPE WHERE ITEMID IN 
+        ]]>
+        <iterate property="itemIdList" open="(" close=")" conjunction=",">
+            #itemIdList[]#
+        </iterate>
+    </delete>
+    
+    <sql id="sql_select_simple">
+        SELECT t.ITEMID, t.ITEMCODE, t.ITEMNAME, t.ITEMENNAME, t.CZID 
+    </sql>
+    <sql id="sql_select">
+        SELECT t.* 
+    </sql>
+    <sql id="sql_from">
+        FROM S_C_DICT_TYPE t 
+    </sql>
+    <sql id="sql_where">
+        WHERE 1=1
+        <dynamic prepend="AND">
+            <isNotNull prepend="AND" property="itemId"> t.ITEMID=#itemId# </isNotNull>
+            <isNotNull prepend="AND" property="itemId_notexist"><![CDATA[ t.ITEMID<>#itemId_notexist# ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemId_in"><![CDATA[ t.ITEMID IN ($itemId_in$) ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemCode"> t.ITEMCODE=#itemCode# </isNotNull>
+            <isNotNull prepend="AND" property="itemName"> t.ITEMNAME=#itemName# </isNotNull>
+            <isNotNull prepend="AND" property="itemCode_like"> t.ITEMCODE like #itemCode_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemName_like"> t.ITEMNAME like #itemName_like# </isNotNull>
+            <isNotNull prepend="AND" property="bizCode"> t.BIZCODE=#bizCode# </isNotNull>
+            <isNotNull prepend="AND" property="levelFlag"> t.LEVELFLAG=#levelFlag# </isNotNull>
+            <isNotNull prepend="AND" property="czId"> (t.CZID=#czId# or t.CZID=0) </isNotNull>
+            <isNotNull prepend="AND" property="enableFlag"> t.ENABLEFLAG=#enableFlag# </isNotNull>
+            <isNotNull prepend="AND" property="exfield01"> t.EXFIELD01=#exfield01#</isNotNull>
+            <isNotNull prepend="AND" property="exfield02"> t.EXFIELD02=#exfield02#</isNotNull>
+        </dynamic>
+    </sql>
+    <sql id="sql_orderby">
+        <isNotNull property="_orderByStr">
+            <![CDATA[ ORDER BY $_orderByStr$ ]]>
+        </isNotNull>
+    </sql>
+    
+    <select id="findById" parameterClass="java.lang.Long" resultMap="configDictTypeResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMID=#value# ]]>
+    </select>
+    <select id="findByCode" parameterClass="java.lang.String" resultMap="configDictTypeResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMCODE=#value# ]]>
+    </select>
+    <select id="findCountByParams" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        <![CDATA[ SELECT COUNT(*) ]]>
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+    </select>
+    <select id="findSimpleByParams" resultMap="configDictTypeResultSimple">
+        <include refid="sql_select_simple" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+    </select>
+    <select id="findByParams" resultMap="configDictTypeResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ limit #_startRow#, #_limitRow# ]]> 
+        </isGreaterThan>
+    </select>
+    <select id="findByParamsOracle" resultMap="configDictTypeResult">
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ SELECT * FROM ( ]]> 
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ SELECT T_P_ALIAS.*, ROWNUM ROWNUM_2 FROM ( ]]>
+            </isGreaterThan>
+        </isGreaterThan>
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ ) T_P_ALIAS WHERE ROWNUM <= #_endRow#) WHERE ROWNUM_2 > #_startRow# ]]>
+            </isGreaterThan>
+            <isLessEqual property="_startRow" compareValue="0">
+                <![CDATA[ ) WHERE ROWNUM <= #_endRow# ]]>
+            </isLessEqual>
+        </isGreaterThan>
+    </select>
+    
+</sqlMap>

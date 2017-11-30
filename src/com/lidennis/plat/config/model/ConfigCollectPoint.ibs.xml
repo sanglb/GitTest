@@ -1,0 +1,189 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ConfigCollectPoint">
+
+    <typeAlias alias="configCollectPoint" type="com.lidennis.plat.config.model.ConfigCollectPoint" />
+
+    <resultMap id="configCollectPointResultSimple" class="configCollectPoint">
+        <result property="itemId"        column="ITEMID" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+    </resultMap>
+    <resultMap id="configCollectPointResult" class="configCollectPoint">
+        <!-- Base Model -->
+        <result property="itemId"        column="ITEMID" />
+        <result property="version"       column="VERSION"      nullValue="1" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="itemDesc"      column="ITEMDESC" />
+        <result property="uuidCode"      column="UUIDCODE" />
+        <result property="createUser"    column="CREATEUSER" />
+        <result property="createTime"    column="CREATETIME" />
+        <result property="updateUser"    column="UPDATEUSER" />
+        <result property="updateTime"    column="UPDATETIME" />
+        <result property="orderNum"      column="ORDERNUM" />
+        <result property="enableFlag"    column="ENABLEFLAG"/>
+        <!-- Extend Model -->
+        <result property="siteTypeCode"  column="SITETYPECODE" />
+        <result property="siteCode"      column="SITECODE" />
+        <result property="siteName"      column="SITENAME" />
+        <result property="itemUrl"       column="ITEMURL" />
+        <result property="itemParam"     column="ITEMPARAM" />
+        <result property="spider"        column="SPIDER" />
+        <result property="spiderNext"    column="SPIDERNEXT" />
+        <result property="isPublic"      column="ISPUBLIC" />
+        <result property="typeCode"      column="TYPECODE" />
+        <result property="beanName"      column="BEANNAME" />
+        <result property="storeType"     column="STORETYPE" />
+        <result property="storeCode"     column="STORECODE" />
+        <result property="exfield01"     column="EXFIELD01" />
+        <result property="exfield02"     column="EXFIELD02" />
+    </resultMap>
+
+    <insert id="insert" parameterClass="configCollectPoint">
+        <![CDATA[
+	        INSERT INTO B_R_COLLECT_POINT (
+                VERSION, ITEMCODE, ITEMNAME, ITEMENNAME, ITEMDESC, UUIDCODE, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, 
+                SITETYPECODE, SITECODE, SITENAME, ITEMURL, ITEMPARAM, SPIDER, SPIDERNEXT, ISPUBLIC, TYPECODE, BEANNAME, STORETYPE, STORECODE, ENABLEFLAG, ORDERNUM, EXFIELD01, EXFIELD02
+            ) VALUES (
+                1, #itemCode#, #itemName#, #itemEnName#, #itemDesc#, #uuidCode#, #createUser#, #createTime#, #updateUser#, #updateTime#,
+                #siteTypeCode#, #siteCode#, #siteName#, #itemUrl#, #itemParam#, #spider#, #spiderNext#, #isPublic#, #typeCode#, #beanName#, #storeType#, #storeCode#, #enableFlag#, #orderNum#, #exfield01#, #exfield02# 
+            )
+        ]]>
+        <selectKey keyProperty="itemId" type="post" resultClass="java.lang.Long">   
+            <![CDATA[ SELECT LAST_INSERT_ID() AS ITEMID ]]>
+        </selectKey>
+    </insert>
+    <insert id="insertOracle" parameterClass="configCollectPoint">
+        <selectKey keyProperty="itemId" resultClass="java.lang.Long">
+            <![CDATA[ SELECT SEQ_B_R_COLLECT_POINT.NEXTVAL AS ITEMID FROM DUAL ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO B_R_COLLECT_POINT (
+                ITEMID, VERSION, ITEMCODE, ITEMNAME, ITEMENNAME, ITEMDESC, UUIDCODE, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, 
+                SITETYPECODE, SITECODE, SITENAME, ITEMURL, ITEMPARAM, SPIDER, SPIDERNEXT, ISPUBLIC, TYPECODE, BEANNAME, STORETYPE, STORECODE, ENABLEFLAG, ORDERNUM, EXFIELD01, EXFIELD02
+            ) VALUES (
+                #itemId#, 1, #itemCode#, #itemName#, #itemEnName#, #itemDesc#, #uuidCode#, #createUser#, #createTime#, #updateUser#, #updateTime#,
+                #siteTypeCode#, #siteCode#, #siteName#, #itemUrl#, #itemParam#, #spider#, #spiderNext#, #isPublic#, #typeCode#, #beanName#, #storeType#, #storeCode#, #enableFlag#, #orderNum#, #exfield01#, #exfield02# 
+            )
+        ]]>
+    </insert>
+    <update id="update" parameterClass="configCollectPoint">
+        <![CDATA[
+            UPDATE B_R_COLLECT_POINT SET 
+                VERSION=VERSION+1, ITEMCODE=#itemCode#, ITEMNAME=#itemName#, ITEMENNAME=#itemEnName#, ITEMDESC=#itemDesc#,  
+                SITETYPECODE=#siteTypeCode#, SITECODE=#siteCode#, SITENAME=#siteName#, ITEMURL=#itemUrl#, ITEMPARAM=#itemParam#, SPIDER=#spider#, SPIDERNEXT=#spiderNext#, ISPUBLIC=#isPublic#, TYPECODE=#typeCode#, BEANNAME=#beanName#, STORETYPE=#storeType#, STORECODE=#storeCode#, 
+                UPDATEUSER=#updateUser#, UPDATETIME=#updateTime#, ENABLEFLAG=#enableFlag#, ORDERNUM=#orderNum#, EXFIELD01=#exfield01#, EXFIELD02=#exfield02#
+            WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </update>
+    <delete id="delete" parameterClass="configCollectPoint">
+        <![CDATA[
+            DELETE FROM B_R_COLLECT_POINT WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </delete>
+    <delete id="deleteBatch" parameterClass="java.util.Map">
+        <![CDATA[
+            DELETE FROM B_R_COLLECT_POINT WHERE ITEMID IN 
+        ]]>
+        <iterate property="itemIdList" open="(" close=")" conjunction=",">
+            #itemIdList[]#
+        </iterate>
+    </delete>
+    
+    <sql id="sql_select_simple">
+        SELECT t.ITEMID, t.ITEMCODE, t.ITEMNAME, t.ITEMENNAME 
+    </sql>
+    <sql id="sql_select">
+        SELECT t.* 
+    </sql>
+    <sql id="sql_from">
+        FROM B_R_COLLECT_POINT t 
+    </sql>
+    <sql id="sql_where">
+        WHERE 1=1
+        <dynamic prepend="AND">
+            <isNotNull prepend="AND" property="itemId"> t.ITEMID=#itemId# </isNotNull>
+            <isNotNull prepend="AND" property="itemId_notexist"><![CDATA[ t.ITEMID<>#itemId_notexist# ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemId_in"><![CDATA[ t.ITEMID IN ($itemId_in$) ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemCode"> t.ITEMCODE=#itemCode# </isNotNull>
+            <isNotNull prepend="AND" property="itemName"> t.ITEMNAME=#itemName# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName"> t.ITEMENNAME=#itemEnName# </isNotNull>
+            <isNotNull prepend="AND" property="itemCode_like"> t.ITEMCODE like #itemCode_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemName_like"> t.ITEMNAME like #itemName_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName_like"> t.ITEMENNAME like #itemEnName_like# </isNotNull>
+            <isNotNull prepend="AND" property="uuidCode"> t.UUIDCODE=#uuidCode# </isNotNull>
+            <isNotNull prepend="AND" property="siteTypeCode"> t.SITETYPECODE=#siteTypeCode# </isNotNull>
+            <isNotNull prepend="AND" property="siteCode"> t.SITECODE=#siteCode# </isNotNull>
+            <isNotNull prepend="AND" property="isPublic"> t.ISPUBLIC=#isPublic# </isNotNull>
+            <!-- 
+            <isNotNull prepend="AND" property="czId"> t.ITEMCODE IN ( select SITECOLLECTCODE from B_R_COLLECT_POINT_AUTH where CZID=#czId# ) </isNotNull>
+             -->
+            <isNotNull prepend="AND" property="enableFlag"> t.ENABLEFLAG=#enableFlag# </isNotNull>
+            <isNotNull prepend="AND" property="exfield01"> t.EXFIELD01=#exfield01#</isNotNull>
+            <isNotNull prepend="AND" property="exfield02"> t.EXFIELD02=#exfield02#</isNotNull>
+        </dynamic>
+    </sql>
+    <sql id="sql_orderby">
+        <isNotNull property="_orderByStr">
+            <![CDATA[ ORDER BY $_orderByStr$ ]]>
+        </isNotNull>
+    </sql>
+    
+    <select id="findById" parameterClass="java.lang.Long" resultMap="configCollectPointResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMID=#value# ]]>
+    </select>
+    <select id="findByCode" parameterClass="java.lang.String" resultMap="configCollectPointResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMCODE=#value# ]]>
+    </select>
+    <select id="findCountByParams" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        <![CDATA[ SELECT COUNT(*) ]]>
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+    </select>
+    <select id="findSimpleByParams" resultMap="configCollectPointResultSimple">
+        <include refid="sql_select_simple" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+    </select>
+    <select id="findByParams" resultMap="configCollectPointResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ limit #_startRow#, #_limitRow# ]]> 
+        </isGreaterThan>
+    </select>
+    <select id="findByParamsOracle" resultMap="configCollectPointResult">
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ SELECT * FROM ( ]]> 
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ SELECT T_P_ALIAS.*, ROWNUM ROWNUM_2 FROM ( ]]>
+            </isGreaterThan>
+        </isGreaterThan>
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ ) T_P_ALIAS WHERE ROWNUM <= #_endRow#) WHERE ROWNUM_2 > #_startRow# ]]>
+            </isGreaterThan>
+            <isLessEqual property="_startRow" compareValue="0">
+                <![CDATA[ ) WHERE ROWNUM <= #_endRow# ]]>
+            </isLessEqual>
+        </isGreaterThan>
+    </select>
+    
+</sqlMap>

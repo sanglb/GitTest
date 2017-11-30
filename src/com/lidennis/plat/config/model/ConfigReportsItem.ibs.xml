@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ConfigReportsItem">
+
+    <typeAlias alias="configReportsItem" type="com.lidennis.plat.config.model.ConfigReportsItem" />
+
+    <resultMap id="configReportsItemResultSimple" class="configReportsItem">
+        <result property="itemId"        column="ITEMID" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+    </resultMap>
+    <resultMap id="configReportsItemResult" class="configReportsItem">
+        <!-- Base Model -->
+        <result property="itemId"        column="ITEMID" />
+        <result property="version"       column="VERSION"      nullValue="1" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="itemDesc"      column="ITEMDESC" />
+        <result property="czCode"        column="CZCODE" />
+        <result property="createUser"    column="CREATEUSER" />
+        <result property="createTime"    column="CREATETIME" />
+        <result property="updateUser"    column="UPDATEUSER" />
+        <result property="updateTime"    column="UPDATETIME" />
+        <result property="orderNum"      column="ORDERNUM" />
+        <result property="enableFlag"    column="ENABLEFLAG"/>
+        <!-- Extend Model -->
+        <result property="reportsId"     column="reportsId" />
+        <result property="bizMode"       column="BIZMODE" />
+        <result property="typeCode"      column="TYPECODE" />
+        <result property="rptTypeCode"   column="rptTypeCode" />
+        <result property="rptShowCode"   column="rptShowCode" />
+        <result property="uuidCode"      column="uuidCode" />
+        <result property="itemParam"     column="itemParam" />
+        <result property="formCond"      column="formCond" />
+        <result property="queryCond"     column="queryCond" />
+        <result property="fillRowFlag"   column="fillRowFlag" />
+        <result property="showColIndex"  column="showColIndex" />
+        <result property="showRowIndex"  column="showRowIndex" />
+        <result property="showWinWidth"  column="showWinWidth" />
+        <result property="showWinHeight" column="showWinHeight" />
+        <result property="showChartWidth"  column="showChartWidth" />
+        <result property="showChartHeight" column="showChartHeight" />
+        <result property="exint01"       column="EXINT01" />
+        <result property="exint02"       column="EXINT02" />
+        <result property="exlong01"      column="EXLONG01" />
+        <result property="exlong02"      column="EXLONG02" />
+        <result property="exfield01"     column="EXFIELD01" />
+        <result property="exfield02"     column="EXFIELD02" />
+    </resultMap>
+    
+    <insert id="insert" parameterClass="configReportsItem">
+        <![CDATA[
+	        INSERT INTO S_C_REPORTS_ITEM (
+                VERSION, ITEMCODE, ITEMNAME, ITEMENNAME, ITEMDESC, CZCODE, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, EXFIELD01, EXFIELD02, EXINT01, EXINT02, EXLONG01, EXLONG02, 
+                REPORTSID, BIZMODE, TYPECODE, RPTTYPECODE, RPTSHOWCODE, UUIDCODE, ITEMPARAM, FORMCOND, QUERYCOND, FILLROWFLAG, SHOWCOLINDEX, SHOWROWINDEX, SHOWWINWIDTH, SHOWWINHEIGHT, SHOWCHARTWIDTH, SHOWCHARTHEIGHT, ENABLEFLAG, ORDERNUM
+            ) VALUES (
+                1, #itemCode#, #itemName#, #itemEnName#, #itemDesc#, #czCode#, #createUser#, #createTime#, #updateUser#, #updateTime#, #exfield01#, #exfield02#, #exint01#, #exint02#, #exlong01#, #exlong02#,
+                #reportsId#, #bizMode#, #typeCode#, #rptTypeCode#, #rptShowCode#, #uuidCode#, #itemParam#, #formCond#, #queryCond#, #fillRowFlag#, #showColIndex#, #showRowIndex#, #showWinWidth#, #showWinHeight#, #showChartWidth#, #showChartHeight#, #enableFlag#, #orderNum# 
+            )
+        ]]>
+        <selectKey keyProperty="itemId" type="post" resultClass="java.lang.Long">   
+            <![CDATA[ SELECT LAST_INSERT_ID() AS ITEMID ]]>
+        </selectKey>
+    </insert>
+    <insert id="insertOracle" parameterClass="configReportsItem">
+        <selectKey keyProperty="itemId" resultClass="java.lang.Long">
+            <![CDATA[ SELECT SEQ_S_C_REPORTS_ITEM.NEXTVAL AS ITEMID FROM DUAL ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO S_C_REPORTS_ITEM (
+                ITEMID, VERSION, ITEMCODE, ITEMNAME, ITEMENNAME, ITEMDESC, CZCODE, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, EXFIELD01, EXFIELD02, EXINT01, EXINT02, EXLONG01, EXLONG02, 
+                REPORTSID, BIZMODE, TYPECODE, RPTTYPECODE, RPTSHOWCODE, UUIDCODE, ITEMPARAM, FORMCOND, QUERYCOND, FILLROWFLAG, SHOWCOLINDEX, SHOWROWINDEX, SHOWWINWIDTH, SHOWWINHEIGHT, SHOWCHARTWIDTH, SHOWCHARTHEIGHT, ENABLEFLAG, ORDERNUM
+            ) VALUES (
+                #itemId#, 1, #itemCode#, #itemName#, #itemEnName#, #itemDesc#, #czCode#, #createUser#, #createTime#, #updateUser#, #updateTime#, #exfield01#, #exfield02#, #exint01#, #exint02#, #exlong01#, #exlong02#,
+                #reportsId#, #bizMode#, #typeCode#, #rptTypeCode#, #rptShowCode#, #uuidCode#, #itemParam#, #formCond#, #queryCond#, #fillRowFlag#, #showColIndex#, #showRowIndex#, #showWinWidth#, #showWinHeight#, #showChartWidth#, #showChartHeight#, #enableFlag#, #orderNum# 
+            )
+        ]]>
+    </insert>
+    <update id="update" parameterClass="configReportsItem">
+        <![CDATA[
+            UPDATE S_C_REPORTS_ITEM SET 
+                VERSION=VERSION+1, ITEMCODE=#itemCode#, ITEMNAME=#itemName#, ITEMENNAME=#itemEnName#, ITEMDESC=#itemDesc#, BIZMODE=#bizMode#, TYPECODE=#typeCode#, RPTSHOWCODE=#rptShowCode#, ITEMPARAM=#itemParam#, FORMCOND=#formCond#,
+                QUERYCOND=#queryCond#, FILLROWFLAG=#fillRowFlag#, SHOWCOLINDEX=#showColIndex#, SHOWROWINDEX=#showRowIndex#, SHOWWINWIDTH=#showWinWidth#, SHOWWINHEIGHT=#showWinHeight#, SHOWCHARTWIDTH=#showChartWidth#, SHOWCHARTHEIGHT=#showChartHeight#,
+                UPDATEUSER=#updateUser#, UPDATETIME=#updateTime#, ENABLEFLAG=#enableFlag#, ORDERNUM=#orderNum#, EXFIELD01=#exfield01#, EXFIELD02=#exfield02#, EXINT01=#exint01#, EXINT02=#exint02#, EXLONG01=#exlong01#, EXLONG02=#exlong02# 
+            WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </update>
+    <delete id="delete" parameterClass="configReportsItem">
+        <![CDATA[
+            DELETE FROM S_C_REPORTS_ITEM WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </delete>
+    <delete id="deleteBatch" parameterClass="java.util.Map">
+        <![CDATA[
+            DELETE FROM S_C_REPORTS_ITEM WHERE ITEMID IN 
+        ]]>
+        <iterate property="itemIdList" open="(" close=")" conjunction=",">
+            #itemIdList[]#
+        </iterate>
+    </delete>
+    
+    <sql id="sql_select_simple">
+        SELECT t.ITEMID, t.ITEMCODE, t.ITEMNAME, t.ITEMENNAME 
+    </sql>
+    <sql id="sql_select">
+        SELECT t.* 
+    </sql>
+    <sql id="sql_from">
+        FROM S_C_REPORTS_ITEM t 
+    </sql>
+    <sql id="sql_where">
+        WHERE 1=1
+        <dynamic prepend="AND">
+            <isNotNull prepend="AND" property="itemId"> t.ITEMID=#itemId# </isNotNull>
+            <isNotNull prepend="AND" property="itemId_notexist"><![CDATA[ t.ITEMID<>#itemId_notexist# ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemId_in"><![CDATA[ t.ITEMID IN ($itemId_in$) ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemCode"> t.ITEMCODE=#itemCode# </isNotNull>
+            <isNotNull prepend="AND" property="itemName"> t.ITEMNAME=#itemName# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName"> t.ITEMENNAME=#itemEnName# </isNotNull>
+            <isNotNull prepend="AND" property="itemCode_like"> t.ITEMCODE like #itemCode_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemName_like"> t.ITEMNAME like #itemName_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName_like"> t.ITEMENNAME like #itemEnName_like# </isNotNull>
+            <isNotNull prepend="AND" property="reportsId"> t.REPORTSID=#reportsId# </isNotNull>
+            <isNotNull prepend="AND" property="rptTypeCode"> t.RPTTYPECODE=#rptTypeCode# </isNotNull>
+            <isNotNull prepend="AND" property="bizMode"> t.BIZMODE=#bizMode# </isNotNull>
+            <isNotNull prepend="AND" property="typeCode"> t.TYPECODE=#typeCode# </isNotNull>
+            <isNotNull prepend="AND" property="rptShowCode"> t.RPTSHOWCODE=#rptShowCode# </isNotNull>
+            <isNotNull prepend="AND" property="uuidCode"> t.UUIDCODE=#uuidCode# </isNotNull>
+            <isNotNull prepend="AND" property="czCode"> t.CZCODE=#czCode# </isNotNull>
+            <isNotNull prepend="AND" property="enableFlag"> t.ENABLEFLAG=#enableFlag# </isNotNull>
+            <isNotNull prepend="AND" property="exfield01"> t.EXFIELD01=#exfield01#</isNotNull>
+            <isNotNull prepend="AND" property="exfield02"> t.EXFIELD02=#exfield02#</isNotNull>
+        </dynamic>
+    </sql>
+    <sql id="sql_orderby">
+        <isNotNull property="_orderByStr">
+            <![CDATA[ ORDER BY $_orderByStr$ ]]>
+        </isNotNull>
+    </sql>
+    
+    <select id="findById" parameterClass="java.lang.Long" resultMap="configReportsItemResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMID=#value# ]]>
+    </select>
+    <select id="findByCode" parameterClass="java.lang.String" resultMap="configReportsItemResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMCODE=#value# ]]>
+    </select>
+    <select id="findCountByParams" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        <![CDATA[ SELECT COUNT(*) ]]>
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+    </select>
+    <select id="findSimpleByParams" resultMap="configReportsItemResultSimple">
+        <include refid="sql_select_simple" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+    </select>
+    <select id="findByParams" resultMap="configReportsItemResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ limit #_startRow#, #_limitRow# ]]> 
+        </isGreaterThan>
+    </select>
+    <select id="findByParamsOracle" resultMap="configReportsItemResult">
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ SELECT * FROM ( ]]> 
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ SELECT T_P_ALIAS.*, ROWNUM ROWNUM_2 FROM ( ]]>
+            </isGreaterThan>
+        </isGreaterThan>
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ ) T_P_ALIAS WHERE ROWNUM <= #_endRow#) WHERE ROWNUM_2 > #_startRow# ]]>
+            </isGreaterThan>
+            <isLessEqual property="_startRow" compareValue="0">
+                <![CDATA[ ) WHERE ROWNUM <= #_endRow# ]]>
+            </isLessEqual>
+        </isGreaterThan>
+    </select>
+    
+</sqlMap>

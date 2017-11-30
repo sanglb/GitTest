@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ClientVersionMain">
+
+    <typeAlias alias="clientVerMain" type="com.lidennis.plat.config.model.ClientVersionMain" />
+
+    <resultMap id="clientVerMainResultSimple" class="clientVerMain">
+        <result property="itemId"        column="ITEMID" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="appId"         column="APPID" />
+        <result property="appMode"       column="APPMODE" />
+        <result property="clientType"    column="CLIENTTYPE" />
+        <result property="uuidCode"      column="UUIDCODE" />
+    </resultMap>
+    <resultMap id="clientVerMainResult" class="clientVerMain">
+        <!-- Base Model -->
+        <result property="itemId"        column="ITEMID" />
+        <result property="version"       column="VERSION"      nullValue="1" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="itemDesc"      column="ITEMDESC" />
+        <result property="czId"          column="CZID" />
+        <result property="createUser"    column="CREATEUSER" />
+        <result property="createTime"    column="CREATETIME" />
+        <result property="updateUser"    column="UPDATEUSER" />
+        <result property="updateTime"    column="UPDATETIME" />
+        <result property="orderNum"      column="ORDERNUM" />
+        <result property="enableFlag"    column="ENABLEFLAG"/>
+        <!-- Extend Model -->
+        <result property="appId"         column="APPID" />
+        <result property="appMode"       column="APPMODE" />
+        <result property="typeCode"      column="TYPECODE" />
+        <result property="bizCode"       column="BIZCODE" />
+        <result property="itemParams"    column="ITEMPARAMS" />
+        <result property="clientType"    column="CLIENTTYPE" />
+        <result property="uuidCode"      column="UUIDCODE" />
+        <result property="imageInfo"     column="IMAGEINFO" />
+        <result property="startVerNum"   column="STARTVERNUM" />
+        <result property="lastVerNum"    column="LASTVERNUM" />
+        <result property="startRlsTime"  column="STARTRLSTIME" />
+        <result property="lastRlsTime"   column="LASTRLSTIME" />
+        <result property="fullFileName"  column="FULLFILENAME" />
+        <result property="incFileName"   column="INCFILENAME" />
+        <result property="devInfo"       column="DEVINFO" />
+        <result property="reqDesc"       column="REQDESC" />
+        <result property="svnInfo"       column="SVNINFO" />
+        <result property="subCount"      column="SUBCOUNT" />
+        <result property="downCount"     column="DOWNCOUNT" />
+        <result property="exfield01"     column="EXFIELD01" />
+        <result property="exfield02"     column="EXFIELD02" />
+    </resultMap>
+    
+    <insert id="insert" parameterClass="clientVerMain">
+        <![CDATA[
+	        INSERT INTO S_C_CLIENT_VER_MAIN (
+                VERSION, ITEMNAME, ITEMENNAME, ITEMDESC, CZID, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, ENABLEFLAG, ORDERNUM, EXFIELD01, EXFIELD02, 
+                APPID, APPMODE, TYPECODE, BIZCODE, ITEMPARAMS, CLIENTTYPE, UUIDCODE, IMAGEINFO, STARTVERNUM, LASTVERNUM, STARTRLSTIME, LASTRLSTIME, FULLFILENAME, INCFILENAME, DEVINFO, SUBCOUNT, DOWNCOUNT, REQDESC, SVNINFO 
+            ) VALUES (
+                1, #itemName#, #itemEnName#, #itemDesc#, #czId#, #createUser#, #createTime#, #updateUser#, #updateTime#, #enableFlag#, #orderNum#, #exfield01#, #exfield02#, 
+                #appId#, #appMode#, #typeCode#, #bizCode#, #itemParams#, #clientType#, #uuidCode#, #imageInfo#, #startVerNum#, #lastVerNum#, #startRlsTime#, #lastRlsTime#, #fullFileName#, #incFileName#, #devInfo#, #subCount#, #downCount#, #reqDesc#, #svnInfo# 
+            )
+        ]]>
+        <selectKey keyProperty="itemId" type="post" resultClass="java.lang.Long">   
+            <![CDATA[ SELECT LAST_INSERT_ID() AS ITEMID ]]>
+        </selectKey>
+    </insert>
+    <insert id="insertOracle" parameterClass="clientVerMain">
+        <selectKey keyProperty="itemId" resultClass="java.lang.Long">
+            <![CDATA[ SELECT SEQ_S_C_CLIENT_VER_MAIN.NEXTVAL AS ITEMID FROM DUAL ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO S_C_CLIENT_VER_MAIN (
+                ITEMID, VERSION, ITEMNAME, ITEMENNAME, ITEMDESC, CZID, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, ENABLEFLAG, ORDERNUM, EXFIELD01, EXFIELD02, 
+                APPID, APPMODE, TYPECODE, BIZCODE, ITEMPARAMS, CLIENTTYPE, UUIDCODE, IMAGEINFO, STARTVERNUM, LASTVERNUM, STARTRLSTIME, LASTRLSTIME, FULLFILENAME, INCFILENAME, DEVINFO, SUBCOUNT, DOWNCOUNT, REQDESC, SVNINFO 
+            ) VALUES (
+                #itemId#, 1, #itemName#, #itemEnName#, #itemDesc#, #czId#, #createUser#, #createTime#, #updateUser#, #updateTime#, #enableFlag#, #orderNum#, #exfield01#, #exfield02#, 
+                #appId#, #appMode#, #typeCode#, #bizCode#, #itemParams#, #clientType#, #uuidCode#, #imageInfo#, #startVerNum#, #lastVerNum#, #startRlsTime#, #lastRlsTime#, #fullFileName#, #incFileName#, #devInfo#, #subCount#, #downCount#, #reqDesc#, #svnInfo# 
+            )
+        ]]>
+    </insert>
+    <update id="update" parameterClass="clientVerMain">
+        <![CDATA[
+            UPDATE S_C_CLIENT_VER_MAIN SET 
+                VERSION=VERSION+1, ITEMNAME=#itemName#, ITEMENNAME=#itemEnName#, ITEMDESC=#itemDesc#, ENABLEFLAG=#enableFlag#, ORDERNUM=#orderNum#, EXFIELD01=#exfield01#, EXFIELD02=#exfield02#, APPID=#appId#, APPMODE=#appMode#, TYPECODE=#typeCode#, BIZCODE=#bizCode#, ITEMPARAMS=#itemParams#, IMAGEINFO=#imageInfo#, 
+                STARTVERNUM=#startVerNum#, LASTVERNUM=#lastVerNum#, STARTRLSTIME=#startRlsTime#, LASTRLSTIME=#lastRlsTime#, FULLFILENAME=#fullFileName#, INCFILENAME=#incFileName#, DEVINFO=#devInfo#, SUBCOUNT=#subCount#, DOWNCOUNT=#downCount#, REQDESC=#reqDesc#, SVNINFO=#svnInfo#
+            WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </update>
+    <delete id="delete" parameterClass="clientVerMain">
+        <![CDATA[
+            DELETE FROM S_C_CLIENT_VER_MAIN WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </delete>
+    <delete id="deleteBatch" parameterClass="java.util.Map">
+        <![CDATA[
+            DELETE FROM S_C_CLIENT_VER_MAIN WHERE ITEMID IN 
+        ]]>
+        <iterate property="itemIdList" open="(" close=")" conjunction=",">
+            #itemIdList[]#
+        </iterate>
+    </delete>
+    
+    <sql id="sql_select_simple">
+        SELECT t.ITEMID, t.ITEMNAME, t.ITEMENNAME, t.APPID, t.APPMODE, t.CLIENTTYPE, t.UUIDCODE
+    </sql>
+    <sql id="sql_select">
+        SELECT t.* 
+    </sql>
+    <sql id="sql_from">
+        FROM S_C_CLIENT_VER_MAIN t 
+    </sql>
+    <sql id="sql_where">
+        WHERE 1=1
+        <dynamic prepend="AND">
+            <isNotNull prepend="AND" property="itemId"> t.ITEMID=#itemId# </isNotNull>
+            <isNotNull prepend="AND" property="itemId_notexist"><![CDATA[ t.ITEMID<>#itemId_notexist# ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemId_in"><![CDATA[ t.ITEMID IN ($itemId_in$) ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemName"> t.ITEMNAME=#itemName# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName"> t.ITEMENNAME=#itemEnName# </isNotNull>
+            <isNotNull prepend="AND" property="itemName_like"> t.ITEMNAME like #itemName_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName_like"> t.ITEMENNAME like #itemEnName_like# </isNotNull>
+            <isNotNull prepend="AND" property="uuidCode"> t.UUIDCODE=#uuidCode# </isNotNull>
+            <isNotNull prepend="AND" property="uuidCode_like"> t.UUIDCODE like #uuidCode_like# </isNotNull>
+            <isNotNull prepend="AND" property="czId"> t.CZID=#czId# </isNotNull>
+            <isNotNull prepend="AND" property="appId"> t.APPID=#appId# </isNotNull>
+            <isNotNull prepend="AND" property="appMode"> t.APPMODE=#appMode# </isNotNull>
+            <isNotNull prepend="AND" property="typeCode"> t.TYPECODE=#typeCode# </isNotNull>
+            <isNotNull prepend="AND" property="bizCode"> t.BIZCODE like #bizCode# </isNotNull>
+            <isNotNull prepend="AND" property="itemParams"> t.ITEMPARAMS like #itemParams# </isNotNull>
+            <isNotNull prepend="AND" property="clientType"> t.CLIENTTYPE=#clientType# </isNotNull>
+            <isNotNull prepend="AND" property="devInfo"> t.DEVINFO like #devInfo# </isNotNull>
+            <isNotNull prepend="AND" property="enableFlag"> t.ENABLEFLAG=#enableFlag# </isNotNull>
+            <isNotNull prepend="AND" property="exfield01"> t.EXFIELD01=#exfield01#</isNotNull>
+            <isNotNull prepend="AND" property="exfield02"> t.EXFIELD02 like #exfield02#</isNotNull>
+        </dynamic>
+    </sql>
+    <sql id="sql_orderby">
+        <isNotNull property="_orderByStr">
+            <![CDATA[ ORDER BY $_orderByStr$ ]]>
+        </isNotNull>
+    </sql>
+    
+    <select id="findById" parameterClass="java.lang.Long" resultMap="clientVerMainResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMID=#value# ]]>
+    </select>
+    <select id="findByCode" parameterClass="java.lang.String" resultMap="clientVerMainResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMCODE=#value# ]]>
+    </select>
+    <select id="findCountByParams" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        <![CDATA[ SELECT COUNT(*) ]]>
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+    </select>
+    <select id="findSimpleByParams" resultMap="clientVerMainResultSimple">
+        <include refid="sql_select_simple" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+    </select>
+    <select id="findByParams" resultMap="clientVerMainResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ limit #_startRow#, #_limitRow# ]]> 
+        </isGreaterThan>
+    </select>
+    <select id="findByParamsOracle" resultMap="clientVerMainResult">
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ SELECT * FROM ( ]]> 
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ SELECT T_P_ALIAS.*, ROWNUM ROWNUM_2 FROM ( ]]>
+            </isGreaterThan>
+        </isGreaterThan>
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ ) T_P_ALIAS WHERE ROWNUM <= #_endRow#) WHERE ROWNUM_2 > #_startRow# ]]>
+            </isGreaterThan>
+            <isLessEqual property="_startRow" compareValue="0">
+                <![CDATA[ ) WHERE ROWNUM <= #_endRow# ]]>
+            </isLessEqual>
+        </isGreaterThan>
+    </select>
+    
+</sqlMap>

@@ -1,0 +1,210 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ClientVersionSub">
+
+    <typeAlias alias="clientVerSub" type="com.lidennis.plat.config.model.ClientVersionSub" />
+
+    <resultMap id="clientVerSubResultSimple" class="clientVerSub">
+        <result property="itemId"        column="ITEMID" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="mainId"        column="MAINID" />
+        <result property="mainCode"      column="MAINCODE" />
+        <result property="versionNum"    column="VERSIONNUM" />
+        <result property="uuidCode"      column="UUIDCODE" />
+    </resultMap>
+    <resultMap id="clientVerSubResult" class="clientVerSub">
+        <!-- Base Model -->
+        <result property="itemId"        column="ITEMID" />
+        <result property="version"       column="VERSION"      nullValue="1" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemEnName"    column="ITEMENNAME" />
+        <result property="itemDesc"      column="ITEMDESC" />
+        <result property="czId"          column="CZID" />
+        <result property="createUser"    column="CREATEUSER" />
+        <result property="createTime"    column="CREATETIME" />
+        <result property="updateUser"    column="UPDATEUSER" />
+        <result property="updateTime"    column="UPDATETIME" />
+        <result property="enableFlag"    column="ENABLEFLAG"/>
+        <!-- Extend Model -->
+        <result property="mainId"        column="MAINID" />
+        <result property="mainCode"      column="MAINCODE" />
+        <result property="versionNum"    column="VERSIONNUM" />
+        <result property="versionType"   column="VERSIONTYPE" />
+        <result property="minSupportNum" column="MINSUPPORTNUM" />
+        <result property="uuidCode"      column="UUIDCODE" />
+        <result property="clientType"    column="CLIENTTYPE" />
+        <result property="clientAdapter" column="CLIENTADAPTER" />
+        <result property="runEnv"        column="RUNENV" />
+        <result property="mergeId"       column="MERGEID" />
+        <result property="branchId"      column="BRANCHID" />
+        <result property="forceFlag"     column="FORCEFLAG" />
+        <result property="devInfo"       column="DEVINFO" />
+        <result property="devStartTime"  column="DEVSTARTTIME" />
+        <result property="devEndTime"    column="DEVENDTIME" />
+        <result property="svnInfo"       column="SVNINFO" />
+        <result property="reqDesc"       column="REQDESC" />
+        <result property="releaseTime"   column="RELEASETIME" />
+        <result property="releaseInfo"   column="RELEASEINFO" />
+        <result property="releaseDesc"   column="RELEASEDESC" />
+        <result property="fullFilePath"  column="FULLFILEPATH" />
+        <result property="fullFileName"  column="FULLFILENAME" />
+        <result property="fullFileSize"  column="FULLFILESIZE" />
+        <result property="fullFileMd5"   column="FULLFILEMD5" />
+        <result property="incFilePath"   column="INCFILEPATH" />
+        <result property="incFileName"   column="INCFILENAME" />
+        <result property="incFileSize"   column="INCFILESIZE" />
+        <result property="incFileMd5"    column="INCFILEMD5" />
+        <result property="downCount"     column="DOWNCOUNT" />
+        <result property="downLastTime"  column="DOWNLASTTIME" />
+        <result property="exfield01"     column="EXFIELD01" />
+        <result property="exfield02"     column="EXFIELD02" />
+    </resultMap>
+    
+    <insert id="insert" parameterClass="clientVerSub">
+        <![CDATA[
+	        INSERT INTO S_C_CLIENT_VER_SUB (
+                VERSION, ITEMNAME, ITEMENNAME, ITEMDESC, CZID, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, ENABLEFLAG, EXFIELD01, EXFIELD02, MAINID, MAINCODE, VERSIONNUM, VERSIONTYPE, MINSUPPORTNUM, UUIDCODE, CLIENTTYPE, CLIENTADAPTER, RUNENV, MERGEID,
+                BRANCHID, FORCEFLAG, DEVINFO, DEVSTARTTIME, DEVENDTIME, SVNINFO, REQDESC, RELEASETIME, RELEASEINFO, RELEASEDESC, FULLFILEPATH, FULLFILENAME, FULLFILESIZE, FULLFILEMD5, INCFILEPATH, INCFILENAME, INCFILESIZE, INCFILEMD5, DOWNCOUNT, DOWNLASTTIME 
+            ) VALUES (
+                1, #itemName#, #itemEnName#, #itemDesc#, #czId#, #createUser#, #createTime#, #updateUser#, #updateTime#, #enableFlag#, #exfield01#, #exfield02#, #mainId#, #mainCode#, #versionNum#, #versionType#, #minSupportNum#, #uuidCode#, #clientType#, #clientAdapter#, #runEnv#, #mergeId#,
+                #branchId#, #forceFlag#, #devInfo#, #devStartTime#, #devEndTime#, #svnInfo#, #reqDesc#, #releaseTime#, #releaseInfo#, #releaseDesc#, #fullFilePath#, #fullFileName#, #fullFileSize#, #fullFileMd5#, #incFilePath#, #incFileName#, #incFileSize#, #incFileMd5#, #downCount#, #downLastTime# 
+            )
+        ]]>
+        <selectKey keyProperty="itemId" type="post" resultClass="java.lang.Long">   
+            <![CDATA[ SELECT LAST_INSERT_ID() AS ITEMID ]]>
+        </selectKey>
+    </insert>
+    <insert id="insertOracle" parameterClass="clientVerSub">
+        <selectKey keyProperty="itemId" resultClass="java.lang.Long">
+            <![CDATA[ SELECT SEQ_S_C_CLIENT_VER_SUB.NEXTVAL AS ITEMID FROM DUAL ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO S_C_CLIENT_VER_SUB (
+                ITEMID, VERSION, ITEMNAME, ITEMENNAME, ITEMDESC, CZID, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, ENABLEFLAG, EXFIELD01, EXFIELD02, MAINID, MAINCODE, VERSIONNUM, VERSIONTYPE, MINSUPPORTNUM, UUIDCODE, CLIENTTYPE, CLIENTADAPTER, RUNENV, MERGEID,
+                BRANCHID, FORCEFLAG, DEVINFO, DEVSTARTTIME, DEVENDTIME, SVNINFO, REQDESC, RELEASETIME, RELEASEINFO, RELEASEDESC, FULLFILEPATH, FULLFILENAME, FULLFILESIZE, FULLFILEMD5, INCFILEPATH, INCFILENAME, INCFILESIZE, INCFILEMD5, DOWNCOUNT, DOWNLASTTIME 
+            ) VALUES (
+                #itemId#, 1, #itemName#, #itemEnName#, #itemDesc#, #czId#, #createUser#, #createTime#, #updateUser#, #updateTime#, #enableFlag#, #exfield01#, #exfield02#, #mainId#, #mainCode#, #versionNum#, #versionType#, #minSupportNum#, #uuidCode#, #clientType#, #clientAdapter#, #runEnv#, #mergeId#,
+                #branchId#, #forceFlag#, #devInfo#, #devStartTime#, #devEndTime#, #svnInfo#, #reqDesc#, #releaseTime#, #releaseInfo#, #releaseDesc#, #fullFilePath#, #fullFileName#, #fullFileSize#, #fullFileMd5#, #incFilePath#, #incFileName#, #incFileSize#, #incFileMd5#, #downCount#, #downLastTime# 
+            )
+        ]]>
+    </insert>
+    <update id="update" parameterClass="clientVerSub">
+        <![CDATA[
+            UPDATE S_C_CLIENT_VER_SUB SET 
+                VERSION=VERSION+1, ITEMNAME=#itemName#, ITEMENNAME=#itemEnName#, ITEMDESC=#itemDesc#, UPDATEUSER=#updateUser#, UPDATETIME=#updateTime#, ENABLEFLAG=#enableFlag#, EXFIELD01=#exfield01#, EXFIELD02=#exfield02#, VERSIONNUM=#versionNum#, VERSIONTYPE=#versionType#, MINSUPPORTNUM=#minSupportNum#,  
+                CLIENTADAPTER=#clientAdapter#, RUNENV=#runEnv#, MERGEID=#mergeId#, BRANCHID=#branchId#, FORCEFLAG=#forceFlag#, DEVINFO=#devInfo#, DEVSTARTTIME=#devStartTime#, DEVENDTIME=#devEndTime#, SVNINFO=#svnInfo#, REQDESC=#reqDesc#, RELEASETIME=#releaseTime#, RELEASEINFO=#releaseInfo#, RELEASEDESC=#releaseDesc#, 
+                FULLFILEPATH=#fullFilePath#, FULLFILENAME=#fullFileName#, FULLFILESIZE=#fullFileSize#, FULLFILEMD5=#fullFileMd5#, INCFILEPATH=#incFilePath#, INCFILENAME=#incFileName#, INCFILESIZE=#incFileSize#, INCFILEMD5=#incFileMd5#, DOWNCOUNT=#downCount#, DOWNLASTTIME=#downLastTime# 
+            WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </update>
+    <delete id="delete" parameterClass="clientVerSub">
+        <![CDATA[
+            DELETE FROM S_C_CLIENT_VER_SUB WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </delete>
+    <delete id="deleteBatch" parameterClass="java.util.Map">
+        <![CDATA[
+            DELETE FROM S_C_CLIENT_VER_SUB WHERE ITEMID IN 
+        ]]>
+        <iterate property="itemIdList" open="(" close=")" conjunction=",">
+            #itemIdList[]#
+        </iterate>
+    </delete>
+    
+    <sql id="sql_select_simple">
+        SELECT t.ITEMID, t.ITEMNAME, t.ITEMENNAME, t.MAINID, t.MAINCODE, t.VERSIONNUM, t.UUIDCODE
+    </sql>
+    <sql id="sql_select">
+        SELECT t.* 
+    </sql>
+    <sql id="sql_from">
+        FROM S_C_CLIENT_VER_SUB t 
+    </sql>
+    <sql id="sql_where">
+        WHERE 1=1
+        <dynamic prepend="AND">
+            <isNotNull prepend="AND" property="itemId"> t.ITEMID=#itemId# </isNotNull>
+            <isNotNull prepend="AND" property="itemId_notexist"><![CDATA[ t.ITEMID<>#itemId_notexist# ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemId_in"><![CDATA[ t.ITEMID IN ($itemId_in$) ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemName"> t.ITEMNAME=#itemName# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName"> t.ITEMENNAME=#itemEnName# </isNotNull>
+            <isNotNull prepend="AND" property="itemName_like"> t.ITEMNAME like #itemName_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemEnName_like"> t.ITEMENNAME like #itemEnName_like# </isNotNull>
+            <isNotNull prepend="AND" property="mainId"> t.MAINID=#mainId# </isNotNull>
+            <isNotNull prepend="AND" property="mainCode"> t.MAINCODE=#mainCode# </isNotNull>
+            <isNotNull prepend="AND" property="versionNum"> t.VERSIONNUM=#versionNum# </isNotNull>
+            <isNotNull prepend="AND" property="uuidCode"> t.UUIDCODE=#uuidCode# </isNotNull>
+            <isNotNull prepend="AND" property="czId"> t.CZID=#czId# </isNotNull>
+            <isNotNull prepend="AND" property="clientType"> t.CLIENTTYPE=#clientType# </isNotNull>
+            <isNotNull prepend="AND" property="forceFlag"> t.FORCEFLAG=#forceFlag# </isNotNull>
+            <isNotNull prepend="AND" property="startNum">
+                <![CDATA[ t.VERSIONNUM>=#startNum# ]]>
+                <isNotNull prepend="AND" property="endNum"><![CDATA[ t.VERSIONNUM<=#endNum# ]]></isNotNull>
+            </isNotNull>
+            <isNotNull prepend="AND" property="enableFlag"> t.ENABLEFLAG=#enableFlag# </isNotNull>
+            <isNotNull prepend="AND" property="exfield01"> t.EXFIELD01=#exfield01#</isNotNull>
+            <isNotNull prepend="AND" property="exfield02"> t.EXFIELD02 like #exfield02#</isNotNull>
+        </dynamic>
+    </sql>
+    <sql id="sql_orderby">
+        <isNotNull property="_orderByStr">
+            <![CDATA[ ORDER BY $_orderByStr$ ]]>
+        </isNotNull>
+    </sql>
+    
+    <select id="findById" parameterClass="java.lang.Long" resultMap="clientVerSubResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMID=#value# ]]>
+    </select>
+    <select id="findByCode" parameterClass="java.lang.String" resultMap="clientVerSubResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMCODE=#value# ]]>
+    </select>
+    <select id="findCountByParams" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        <![CDATA[ SELECT COUNT(*) ]]>
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+    </select>
+    <select id="findSimpleByParams" resultMap="clientVerSubResultSimple">
+        <include refid="sql_select_simple" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+    </select>
+    <select id="findByParams" resultMap="clientVerSubResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ limit #_startRow#, #_limitRow# ]]> 
+        </isGreaterThan>
+    </select>
+    <select id="findByParamsOracle" resultMap="clientVerSubResult">
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ SELECT * FROM ( ]]> 
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ SELECT T_P_ALIAS.*, ROWNUM ROWNUM_2 FROM ( ]]>
+            </isGreaterThan>
+        </isGreaterThan>
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ ) T_P_ALIAS WHERE ROWNUM <= #_endRow#) WHERE ROWNUM_2 > #_startRow# ]]>
+            </isGreaterThan>
+            <isLessEqual property="_startRow" compareValue="0">
+                <![CDATA[ ) WHERE ROWNUM <= #_endRow# ]]>
+            </isLessEqual>
+        </isGreaterThan>
+    </select>
+    
+</sqlMap>

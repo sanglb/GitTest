@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap
+    PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="ConfigAppParam">
+
+    <typeAlias alias="configAppParam" type="com.lidennis.plat.config.model.ConfigAppParam" />
+
+    <resultMap id="configAppParamResultSimple" class="configAppParam">
+        <result property="itemId"        column="ITEMID" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemValue"     column="ITEMVALUE" />
+        <result property="splitSymbol"   column="SPLITSYMBOL" />
+    </resultMap>
+    <resultMap id="configAppParamResult" class="configAppParam">
+        <!-- BaseModel -->
+        <result property="itemId"        column="ITEMID" />
+        <result property="version"       column="VERSION"      nullValue="1" />
+        <result property="itemCode"      column="ITEMCODE" />
+        <result property="itemName"      column="ITEMNAME" />
+        <result property="itemDesc"      column="ITEMDESC" />
+        <result property="czCode"        column="CZCODE" />
+        <result property="createUser"    column="CREATEUSER" />
+        <result property="createTime"    column="CREATETIME" />
+        <result property="updateUser"    column="UPDATEUSER" />
+        <result property="updateTime"    column="UPDATETIME" />
+        <result property="czId"          column="CZID" />
+        <result property="orderNum"      column="ORDERNUM" />
+        <result property="enableFlag"    column="ENABLEFLAG"/>
+        <result property="bizCode"       column="BIZCODE"/>
+        <result property="appMode"       column="APPMODE" />
+        <result property="itemType"      column="ITEMTYPE" />
+        <result property="itemValue"     column="ITEMVALUE" />
+        <result property="splitSymbol"   column="SPLITSYMBOL" />
+    </resultMap>
+
+    <insert id="insert" parameterClass="configAppParam">
+        <![CDATA[
+            INSERT INTO S_C_APP_PARAM (
+                VERSION, ITEMCODE, BIZCODE, ITEMNAME, ITEMDESC, CZCODE, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, CZID, ENABLEFLAG, ORDERNUM, APPMODE, ITEMTYPE, ITEMVALUE, SPLITSYMBOL
+            ) VALUES (
+                1, #itemCode#, #bizCode#, #itemName#, #itemDesc#, #czCode#, #createUser#, #createTime#, #updateUser#, #updateTime#, #czId#, #enableFlag#, #orderNum#, #appMode#, #itemType#, #itemValue#, #splitSymbol#
+            )
+        ]]>
+        <selectKey keyProperty="itemId" type="post" resultClass="java.lang.Long">   
+            <![CDATA[ SELECT LAST_INSERT_ID() AS ITEMID ]]>
+        </selectKey>
+    </insert>
+    <insert id="insertOracle" parameterClass="configAppParam">
+        <selectKey keyProperty="itemId" resultClass="java.lang.Long">
+            <![CDATA[ SELECT SEQ_S_CONFIG_APP_PARAM.NEXTVAL AS ITEMID FROM DUAL ]]>
+        </selectKey>
+        <![CDATA[
+            INSERT INTO S_C_APP_PARAM (
+                ITEMID, VERSION, ITEMCODE, BIZCODE, ITEMNAME, ITEMDESC, CZCODE, CREATEUSER, CREATETIME, UPDATEUSER, UPDATETIME, CZID, ENABLEFLAG, ORDERNUM, APPMODE, ITEMTYPE, ITEMVALUE, SPLITSYMBOL
+            ) VALUES (
+                #itemId#, 1, #itemCode#, #bizCode#, #itemName#, #itemDesc#, #czCode#, #createUser#, #createTime#, #updateUser#, #updateTime#, #czId#, #enableFlag#, #orderNum#, #appMode#, #itemType#, #itemValue#, #splitSymbol#
+            )
+        ]]>
+    </insert>
+    <update id="update" parameterClass="configAppParam">
+        <![CDATA[
+            UPDATE S_C_APP_PARAM SET 
+                VERSION=VERSION+1, BIZCODE=#bizCode#, ITEMNAME=#itemName#, ITEMDESC=#itemDesc#, UPDATEUSER=#updateUser#, UPDATETIME=#updateTime#, ENABLEFLAG=#enableFlag#, ORDERNUM=#orderNum#, ITEMTYPE=#itemType#, ITEMVALUE=#itemValue#, SPLITSYMBOL=#splitSymbol#             
+            WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </update>
+    <delete id="delete" parameterClass="configAppParam">
+        <![CDATA[
+            DELETE FROM S_C_APP_PARAM WHERE ITEMID=#itemId# AND VERSION=#version#
+        ]]>
+    </delete>
+    <delete id="deleteBatch" parameterClass="java.util.Map">
+        <![CDATA[
+            DELETE FROM S_C_APP_PARAM WHERE ITEMID IN 
+        ]]>
+        <iterate property="itemIdList" open="(" close=")" conjunction=",">
+            #itemIdList[]#
+        </iterate>
+    </delete>
+    
+    <sql id="sql_select_simple">
+        SELECT t.ITEMID, t.ITEMCODE, t.ITEMNAME, t.ITEMVALUE, t.SPLITSYMBOL
+    </sql>
+    <sql id="sql_select">
+        SELECT t.* 
+    </sql>
+    <sql id="sql_from">
+        FROM S_C_APP_PARAM t 
+    </sql>
+    <sql id="sql_where">
+        WHERE 1=1
+        <dynamic prepend="AND">
+            <isNotNull prepend="AND" property="itemId"> t.ITEMID=#itemId# </isNotNull>
+            <isNotNull prepend="AND" property="itemId_notexist"><![CDATA[ t.ITEMID<>#itemId_notexist# ]]></isNotNull>
+            <isNotNull prepend="AND" property="itemCode"> t.ITEMCODE=#itemCode#</isNotNull>
+            <isNotNull prepend="AND" property="itemName"> t.ITEMNAME=#itemName#</isNotNull>
+            <isNotNull prepend="AND" property="itemCode_like"> t.ITEMCODE like #itemCode_like# </isNotNull>
+            <isNotNull prepend="AND" property="itemName_like"> t.ITEMNAME like #itemName_like# </isNotNull>
+            <isNotNull prepend="AND" property="bizCode"> t.BIZCODE=#bizCode#</isNotNull>
+            <isNotNull prepend="AND" property="appMode"> t.APPMODE=#appMode#</isNotNull>
+            <isNotNull prepend="AND" property="itemType"> t.ITEMTYPE=#itemType#</isNotNull>
+            <isNotNull prepend="AND" property="itemType_notexist"><![CDATA[ t.ITEMTYPE<>#itemType_notexist# ]]></isNotNull> 
+            <isNotNull prepend="AND" property="czId"> t.CZID=#czId# </isNotNull>
+            <isNull property="czId">
+                <isNotNull prepend="AND" property="czCode"> t.CZCODE=#czCode# </isNotNull>
+            </isNull>
+            <isNotNull prepend="AND" property="enableFlag"> t.ENABLEFLAG=#enableFlag#</isNotNull>
+        </dynamic>
+    </sql>
+    <sql id="sql_orderby">
+        <isNotNull property="_orderByStr">
+            <![CDATA[ ORDER BY $_orderByStr$ ]]>
+        </isNotNull>
+    </sql>
+    
+    <select id="findById" parameterClass="java.lang.Long" resultMap="configAppParamResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMID=#value# ]]>
+    </select>
+    <select id="findByCode" parameterClass="java.lang.String" resultMap="configAppParamResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <![CDATA[ WHERE t.ITEMCODE=#value# ]]>
+    </select>
+    <select id="findCountByParams" parameterClass="java.util.Map" resultClass="java.lang.Integer">
+        <![CDATA[ SELECT COUNT(*) ]]>
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+    </select>
+    <select id="findSimpleByParams" resultMap="configAppParamResultSimple">
+        <include refid="sql_select_simple" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+    </select>
+    <select id="findByParams" resultMap="configAppParamResult">
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ limit #_startRow#, #_limitRow# ]]> 
+        </isGreaterThan>
+    </select>
+    <select id="findByParamsOracle" resultMap="configAppParamResult">
+        <isGreaterThan property="_endRow" compareValue="0">
+            <![CDATA[ SELECT * FROM ( ]]> 
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ SELECT T_P_ALIAS.*, ROWNUM ROWNUM_2 FROM ( ]]>
+            </isGreaterThan>
+        </isGreaterThan>
+        <include refid="sql_select" />
+        <include refid="sql_from" />
+        <include refid="sql_where" />
+        <include refid="sql_orderby" />
+        <isGreaterThan property="_endRow" compareValue="0">
+            <isGreaterThan property="_startRow" compareValue="0">
+                <![CDATA[ ) T_P_ALIAS WHERE ROWNUM <= #_endRow#) WHERE ROWNUM_2 > #_startRow# ]]>
+            </isGreaterThan>
+            <isLessEqual property="_startRow" compareValue="0">
+                <![CDATA[ ) WHERE ROWNUM <= #_endRow# ]]>
+            </isLessEqual>
+        </isGreaterThan>
+    </select>
+    
+</sqlMap>
